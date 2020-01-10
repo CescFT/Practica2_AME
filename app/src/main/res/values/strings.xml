@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AME - Simon Says</string>
+    <string name="blau">Blau</string>
+    <string name="groc">Groc</string>
+    <string name="vermell">Vermell</string>
+    <string name="verd">Verd</string>
+    <string name="Resultat">El teu resultat és:</string>
 </resources>
