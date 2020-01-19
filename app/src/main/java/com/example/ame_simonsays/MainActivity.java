@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Button botoVerd;
     private Button botoGroc;
     private List<colors> colorsDisponibles = new ArrayList<colors>();
-    List<colors> sequencia  = new ArrayList<colors>();
+    private List<colors> sequencia  = new ArrayList<colors>();
     int sequenceLength;
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor sharedPrefsEditor;
@@ -55,12 +55,18 @@ public class MainActivity extends AppCompatActivity {
         return t.getText().toString().equals(text);
     }
 
+    public void bttnOnClick(View view)
+    {
+        //bttn handler???
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextView =(TextView) findViewById(R.id.seg_color);
+
+
+        /*mTextView =(TextView) findViewById(R.id.seg_color);
         indexSeq =0;
         botoBlau =  (Button) findViewById(R.id.botoBlau);
         botoVermell = (Button) findViewById(R.id.botoVermell);
@@ -121,6 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 mTextView.setText(sequencia.get(indexSeq).toString());
 
             }
-        }
+        }*/
     }
 }
