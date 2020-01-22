@@ -125,8 +125,9 @@ public class MainActivity extends AppCompatActivity {
         botoGroc.setEnabled(false);
         botoBlau.setEnabled(false);
         mostrarComponents();
-        /*Intent intent = new Intent(GameActivity.this,RankingActivity.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(MainActivity.this,RankingActivity.class);
+        intent.putExtra("puntuacio", punts);
+        startActivity(intent);
     }
 
     public void onClickSelectLevelMadness(View view){
