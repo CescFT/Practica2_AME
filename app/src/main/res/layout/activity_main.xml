@@ -182,7 +182,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
-        android:focusable="false"
+        android:focusable="auto"
         android:focusableInTouchMode="true"
         android:gravity="center_horizontal"
         android:inputType="textPersonName"
