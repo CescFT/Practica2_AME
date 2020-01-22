@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,18 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private Button nivell3;
     private Button madness;
 
+    private EditText textNomJugador;
 
     private int nivell;
     private int dificultat;
     private int punts = 0;
     private int modeJoc;
-
-
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         nivell2 = (Button) findViewById(R.id.madness2);
         nivell3 = (Button) findViewById(R.id.madness3);
         madness = (Button) findViewById(R.id.bmadness);
+        textNomJugador = (EditText) findViewById(R.id.editText);
 
         botoVermell.setEnabled(false);
         botoVerd.setEnabled(false);
@@ -99,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         nivell2.setTag(2);
         nivell3.setTag(3);
         radioGrup.setVisibility(View.INVISIBLE);
+        textNomJugador.setVisibility(View.VISIBLE);
 
         sharedPrefs = getPreferences(MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         botoBlau.setEnabled(false);
         mostrarComponents();
         Intent intent = new Intent(MainActivity.this,RankingActivity.class);
-        intent.putExtra("puntuacio", punts);
+        intent.putExtra("Puntuacio", String.valueOf(punts));
         startActivity(intent);
     }
 
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     public void amagarComponents(){
         botonera.setVisibility(View.GONE);
         radioGrup.setVisibility(View.GONE);
-
+        textNomJugador.setVisibility(View.INVISIBLE);
     }
 
     public void onClickJugarClassic(View view) {
@@ -235,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
         botoVerd.setEnabled(true);
         botoGroc.setEnabled(true);
         botoBlau.setEnabled(true);
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -257,7 +256,6 @@ public class MainActivity extends AppCompatActivity {
             //inicialització de la seqüència que tindrà el joc.
             for(int i=0; i<sequenceLength; i++)
             {
-
                 sequencia.add(rand.nextInt(4));
             }
         }else{
