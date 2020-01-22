@@ -202,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void amagarComponents(){
         botonera.setVisibility(View.GONE);
-        labelFase.setVisibility(View.VISIBLE);
         radioGrup.setVisibility(View.GONE);
 
     }
@@ -230,7 +229,8 @@ public class MainActivity extends AppCompatActivity {
         punts=0;
         textResultat.setText("");
         nivell=1;
-
+        textFase.setTextSize(32);
+        textFase.setText("Prepara't!");
         botoVermell.setEnabled(true);
         botoVerd.setEnabled(true);
         botoGroc.setEnabled(true);
@@ -246,7 +246,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void iniciarNivell(){
+        labelFase.setVisibility(View.VISIBLE);
+        textFase.setTextSize(44);
         textFase.setText(String.valueOf(nivell));
+
         Random rand = new Random();
         if(modeJoc==1) {
             sequencia = new ArrayList<Integer>();
