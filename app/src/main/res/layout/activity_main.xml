@@ -11,23 +11,17 @@
         android:id="@+id/seg_color"
         android:layout_width="121dp"
         android:layout_height="25dp"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="117dp" />
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="120dp"
+        android:gravity="center|center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
-        android:layout_width="121dp"
-        android:layout_height="25dp"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="551dp" />
-
-    <TextView
-        android:layout_width="149dp"
-        android:layout_height="23dp"
-        android:text="@string/Resultat"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="512dp" />
-
-    <TextView
+        android:id="@+id/textView2"
         android:layout_width="121dp"
         android:layout_height="25dp"
         android:text="@string/app_name"
@@ -38,58 +32,103 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.065" />
 
-    <ImageView
-        android:layout_width="316dp"
-        android:layout_height="291dp"
-        android:src="@drawable/dot"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="194dp" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="391dp"
+        android:layout_height="354dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seg_color">
 
-    <Button
-        android:id="@+id/botoVerd"
-        android:layout_width="76dp"
-        android:layout_height="39dp"
-        android:background="@drawable/bttn_personalitzat_verd"
-        android:padding="10dp"
-        android:text="@string/verd"
-        android:onClick="bttnOnClick"
-        android:textColor="#ffffff"
-        tools:layout_editor_absoluteX="241dp"
-        tools:layout_editor_absoluteY="313dp" />
+        <Button
+            android:id="@+id/botoBlau"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="80dp"
+            android:background="@color/colorBlauFosc"
+            android:onClick="onClickBoto"
+            android:textColor="#ffffff" />
 
-    <Button
-        android:id="@+id/botoGroc"
-        android:layout_width="76dp"
-        android:layout_height="39dp"
-        android:background="@drawable/bttn_personalitzat_groc"
-        android:text="@string/groc"
-        android:textColor="#000000"
-        android:onClick="bttnOnClick"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="316dp" />
+        <Button
+            android:id="@+id/botoGroc"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:background="@color/colorGrocFosc"
+            android:onClick="onClickBoto"
+            android:textColor="#000000" />
 
-    <Button
-        android:id="@+id/botoVermell"
-        android:layout_width="76dp"
-        android:layout_height="39dp"
-        android:background="@drawable/bttn_personalitzat_vermell"
-        android:padding="10dp"
-        android:text="@string/verd"
-        android:onClick="bttnOnClick"
-        android:textColor="#ffffff"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="399dp" />
+        <Button
+            android:id="@+id/botoVerd"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
+            android:background="@color/colorVerdFosc"
+            android:onClick="onClickBoto"
+            android:padding="10dp"
+            android:textColor="#ffffff" />
 
-    <Button
-        android:id="@+id/botoBlau"
-        android:layout_width="76dp"
-        android:layout_height="39dp"
-        android:background="@drawable/bttn_personalitzat_blau"
-        android:text="@string/blau"
-        android:onClick="bttnOnClick"
-        android:textColor="#ffffff"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="226dp" />
+        <Button
+            android:id="@+id/botoVermell"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="80dp"
+            android:layout_marginEnd="80dp"
+            android:layout_marginBottom="191dp"
+            android:background="@color/colorVermellFosc"
+            android:onClick="onClickBoto"
+            android:padding="10dp"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textResultat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="185dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textResultat">
+
+        <Button
+            android:id="@+id/bclassic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickJugarClassic"
+            android:text="Classic" />
+
+        <Button
+            android:id="@+id/bmadness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickJugarMadness"
+            android:text="Madness" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

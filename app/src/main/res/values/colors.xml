@@ -3,4 +3,12 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorVerdClar">#9FC079</color>
+    <color name="colorVermellClar">#F7AFAA</color>
+    <color name="colorBlauClar">#8C92AF</color>
+    <color name="colorGrocClar">#FCF1BE</color>
+    <color name="colorVerdFosc">#4CAF50</color>
+    <color name="colorVermellFosc">#CE372B</color>
+    <color name="colorBlauFosc">#2C3D9E</color>
+    <color name="colorGrocFosc">#FFE923</color>
 </resources>
