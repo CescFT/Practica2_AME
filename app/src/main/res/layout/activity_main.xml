@@ -4,73 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".GameActivity">
 
 
     <TextView
-        android:id="@+id/seg_color"
-        android:layout_width="121dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="120dp"
-        android:gravity="center|center_horizontal"
+        android:id="@+id/textResultat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_horizontal"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/labelFase"
         android:layout_width="121dp"
         android:layout_height="25dp"
-        android:text="@string/app_name"
+        android:text="FASE"
+        android:textAlignment="center"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.065" />
+        app:layout_constraintVertical_bias="0.022" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="391dp"
-        android:layout_height="354dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/botonera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seg_color">
+        app:layout_constraintTop_toBottomOf="@+id/textResultat">
 
         <Button
             android:id="@+id/botoBlau"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/colorBlauFosc"
             android:onClick="onClickBoto"
             android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/botoGroc"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/colorGrocFosc"
             android:onClick="onClickBoto"
             android:textColor="#000000" />
 
         <Button
             android:id="@+id/botoVerd"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="80dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/colorVerdFosc"
             android:onClick="onClickBoto"
             android:padding="10dp"
@@ -78,11 +80,9 @@
 
         <Button
             android:id="@+id/botoVermell"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginBottom="191dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/colorVermellFosc"
             android:onClick="onClickBoto"
             android:padding="10dp"
@@ -90,28 +90,18 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textResultat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="185dp"
+        android:id="@+id/botonera"
+        android:layout_width="413dp"
+        android:layout_height="49dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroupNivell"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textResultat">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/bclassic"
@@ -129,6 +119,56 @@
             android:onClick="onClickJugarMadness"
             android:text="Madness" />
     </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroupNivell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="136dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="58dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/rbnivell1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Nivell 1" />
+
+        <RadioButton
+            android:id="@+id/rbnivell2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nivell 2" />
+
+        <RadioButton
+            android:id="@+id/rbnivell3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nivell 3" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/fase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="177dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="176dp"
+        android:layout_marginBottom="68dp"
+        android:text="Cesc Says!"
+        android:textSize="44sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelFase" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

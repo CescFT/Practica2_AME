@@ -2,12 +2,15 @@ package com.example.ame_simonsays;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
@@ -20,13 +23,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Elements que necessitem per a executar el codi
      */
-    private TextView mTextView;
     private TextView textResultat;
+    private TextView textFase;
+    private TextView labelFase;
+
     private int indexSeq;
     private Button botoBlau;
     private Button botoVermell;
     private Button botoVerd;
     private Button botoGroc;
+
+    private LinearLayout botonera;
+
     private List<Integer> sequencia  = new ArrayList<Integer>();
     private int index = 0;
     private int valorEscollit=5;
@@ -36,8 +44,13 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private int temps=0;
 
+    private RadioGroup radioGrup;
+    private RadioButton radioButton1;
+    private RadioButton radioButton2;
+    private RadioButton radioButton3;
 
-    private int nivell = 2;
+    private int nivell;
+    private int dificultat;
     private int punts = 0;
     private int modeJoc;
 
@@ -55,18 +68,30 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mTextView =(TextView) findViewById(R.id.seg_color);
         indexSeq =0;
         botoBlau =  (Button) findViewById(R.id.botoBlau);
         botoVermell = (Button) findViewById(R.id.botoVermell);
         botoVerd = (Button) findViewById(R.id.botoVerd);
         botoGroc = (Button) findViewById(R.id.botoGroc);
         textResultat = (TextView) findViewById(R.id.textResultat);
+        textFase = (TextView) findViewById(R.id.fase);
+        labelFase = (TextView) findViewById(R.id.labelFase);
+        botonera = (LinearLayout) findViewById(R.id.botonera);
+
+        radioGrup = (RadioGroup) findViewById(R.id.radioGroupNivell);
+        radioButton1 = (RadioButton) findViewById(R.id.rbnivell1);
+        radioButton2 = (RadioButton) findViewById(R.id.rbnivell2);
+        radioButton3 = (RadioButton) findViewById(R.id.rbnivell3);
 
         botoVermell.setTag(0);
         botoVerd.setTag(1);
         botoGroc.setTag(2);
         botoBlau.setTag(3);
+
+        radioButton1.setTag(1);
+        radioButton2.setTag(2);
+        radioButton3.setTag(3);
+
 
         sharedPrefs = getPreferences(MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
@@ -86,7 +111,11 @@ public class MainActivity extends AppCompatActivity {
         }, 250);
     }
     public void finalJoc(){
-        mTextView.setText("Game Over");
+        textFase.setText("Cesc Says!");
+        textResultat.setText("Game Over");
+        mostrarComponents();
+        /*Intent intent = new Intent(GameActivity.this,RankingActivity.class);
+        startActivity(intent);*/
     }
     public void comprovaBoto(int c){
         if(c!=sequencia.get(index)) finalJoc();
@@ -99,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         seguentNivell();
-                        }
+                    }
                 }, 2000);
             }
         }
@@ -118,20 +147,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void canviColorClar(int tag, boolean canvi){
-            switch(tag){
-                case 0: //vermell
-                    botoVermell.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
-                    break;
-                case 1: //verd
-                    botoVerd.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
-                    break;
-                case 2: //groc
-                    botoGroc.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
-                    break;
-                case 3: //blau
-                    botoBlau.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
-                    break;
-            }
+        switch(tag){
+            case 0: //vermell
+                botoVermell.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
+                break;
+            case 1: //verd
+                botoVerd.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
+                break;
+            case 2: //groc
+                botoGroc.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
+                break;
+            case 3: //blau
+                botoBlau.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
+                break;
+        }
     }
 
 
@@ -145,35 +174,52 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    public void onClickJugarClassic(View view) {
 
-        mTextView.setText("");
+    public void mostrarComponents(){
+        botonera.setVisibility(View.VISIBLE);
+        labelFase.setVisibility(View.INVISIBLE);
+        radioGrup.setVisibility(View.VISIBLE);
+    }
+
+    public void amagarComponents(){
+        botonera.setVisibility(View.GONE);
+        labelFase.setVisibility(View.VISIBLE);
+        radioGrup.setVisibility(View.GONE);
+    }
+
+    public void onClickJugarClassic(View view) {
         modeJoc=0;
-        punts=0;
-        textResultat.setText("");
-        nivell=1;
         sequencia = new ArrayList<Integer>();
         sequenceLength=0;
-        iniciarNivell();
-
+        inicialitzacions();
     }
 
     public void onClickJugarMadness(View view) {
-
-        mTextView.setText("");
         modeJoc=1;
+        inicialitzacions();
+    }
+
+    public void inicialitzacions(){
+        amagarComponents();
+        textResultat.setText("");
         punts=0;
         textResultat.setText("");
         nivell=1;
+
+        int seleccionat = radioGrup.getCheckedRadioButtonId();
+        RadioButton rb = (RadioButton) findViewById(seleccionat);
+        dificultat = (int) rb.getTag();
+
+
         iniciarNivell();
     }
 
     public void iniciarNivell(){
-
+        textFase.setText(String.valueOf(nivell));
         Random rand = new Random();
         if(modeJoc==1) {
             sequencia = new ArrayList<Integer>();
-            sequenceLength = nivell;
+            sequenceLength = nivell*dificultat;
             //inicialització de la seqüència que tindrà el joc.
             for(int i=0; i<sequenceLength; i++)
             {
