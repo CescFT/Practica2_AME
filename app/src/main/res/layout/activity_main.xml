@@ -96,10 +96,10 @@
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="1dp"
         android:orientation="horizontal"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroupNivell"
+        app:layout_constraintBottom_toTopOf="@+id/layoutNivell"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -116,43 +116,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:onClick="onClickJugarMadness"
+            android:onClick="onClickSelectLevelMadness"
             android:text="Madness" />
     </LinearLayout>
-
-    <RadioGroup
-        android:id="@+id/radioGroupNivell"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginEnd="165dp"
-        android:layout_marginBottom="58dp"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <RadioButton
-            android:id="@+id/rbnivell1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Nivell 1" />
-
-        <RadioButton
-            android:id="@+id/rbnivell2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nivell 2" />
-
-        <RadioButton
-            android:id="@+id/rbnivell3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Nivell 3" />
-    </RadioGroup>
 
     <TextView
         android:id="@+id/fase"
@@ -169,6 +135,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelFase" />
+
+    <LinearLayout
+        android:id="@+id/layoutNivell"
+        android:layout_width="449dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="55dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone">
+
+        <Button
+            android:id="@+id/madness1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickJugarMadness"
+            android:text="Nivell 1" />
+
+        <Button
+            android:id="@+id/madness2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickJugarMadness"
+            android:text="Nivell 2" />
+
+        <Button
+            android:id="@+id/madness3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickJugarMadness"
+            android:text="Nivell 3" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

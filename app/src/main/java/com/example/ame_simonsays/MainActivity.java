@@ -44,10 +44,12 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private int temps=0;
 
-    private RadioGroup radioGrup;
-    private RadioButton radioButton1;
-    private RadioButton radioButton2;
-    private RadioButton radioButton3;
+    private LinearLayout radioGrup;
+    private Button nivell1;
+    private Button nivell2;
+    private Button nivell3;
+    private Button madness;
+
 
     private int nivell;
     private int dificultat;
@@ -78,20 +80,25 @@ public class MainActivity extends AppCompatActivity {
         labelFase = (TextView) findViewById(R.id.labelFase);
         botonera = (LinearLayout) findViewById(R.id.botonera);
 
-        radioGrup = (RadioGroup) findViewById(R.id.radioGroupNivell);
-        radioButton1 = (RadioButton) findViewById(R.id.rbnivell1);
-        radioButton2 = (RadioButton) findViewById(R.id.rbnivell2);
-        radioButton3 = (RadioButton) findViewById(R.id.rbnivell3);
+        radioGrup = (LinearLayout) findViewById(R.id.layoutNivell);
+        nivell1 = (Button) findViewById(R.id.madness1);
+        nivell2 = (Button) findViewById(R.id.madness2);
+        nivell3 = (Button) findViewById(R.id.madness3);
+        madness = (Button) findViewById(R.id.bmadness);
 
+        botoVermell.setEnabled(false);
+        botoVerd.setEnabled(false);
+        botoGroc.setEnabled(false);
+        botoBlau.setEnabled(false);
         botoVermell.setTag(0);
         botoVerd.setTag(1);
         botoGroc.setTag(2);
         botoBlau.setTag(3);
 
-        radioButton1.setTag(1);
-        radioButton2.setTag(2);
-        radioButton3.setTag(3);
-
+        nivell1.setTag(1);
+        nivell2.setTag(2);
+        nivell3.setTag(3);
+        radioGrup.setVisibility(View.INVISIBLE);
 
         sharedPrefs = getPreferences(MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
@@ -113,10 +120,20 @@ public class MainActivity extends AppCompatActivity {
     public void finalJoc(){
         textFase.setText("Cesc Says!");
         textResultat.setText("Game Over");
+        botoVermell.setEnabled(false);
+        botoVerd.setEnabled(false);
+        botoGroc.setEnabled(false);
+        botoBlau.setEnabled(false);
         mostrarComponents();
         /*Intent intent = new Intent(GameActivity.this,RankingActivity.class);
         startActivity(intent);*/
     }
+
+    public void onClickSelectLevelMadness(View view){
+        radioGrup.setVisibility(View.VISIBLE);
+        madness.setBackgroundColor(getResources().getColor(R.color.colorBotoPitjat));
+    }
+
     public void comprovaBoto(int c){
         if(c!=sequencia.get(index)) finalJoc();
         else{
@@ -179,12 +196,14 @@ public class MainActivity extends AppCompatActivity {
         botonera.setVisibility(View.VISIBLE);
         labelFase.setVisibility(View.INVISIBLE);
         radioGrup.setVisibility(View.VISIBLE);
+        radioGrup.setVisibility(View.INVISIBLE);
     }
 
     public void amagarComponents(){
         botonera.setVisibility(View.GONE);
         labelFase.setVisibility(View.VISIBLE);
         radioGrup.setVisibility(View.GONE);
+
     }
 
     public void onClickJugarClassic(View view) {
@@ -196,7 +215,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickJugarMadness(View view) {
         modeJoc=1;
+        int seleccionat = view.getId();
+        Button rb = (Button) findViewById(seleccionat);
+        dificultat = (int) rb.getTag();
         inicialitzacions();
+        madness.setBackgroundDrawable(nivell1.getBackground());
+
     }
 
     public void inicialitzacions(){
@@ -206,12 +230,18 @@ public class MainActivity extends AppCompatActivity {
         textResultat.setText("");
         nivell=1;
 
-        int seleccionat = radioGrup.getCheckedRadioButtonId();
-        RadioButton rb = (RadioButton) findViewById(seleccionat);
-        dificultat = (int) rb.getTag();
+        botoVermell.setEnabled(true);
+        botoVerd.setEnabled(true);
+        botoGroc.setEnabled(true);
+        botoBlau.setEnabled(true);
 
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                iniciarNivell();
+            }
+        }, 2000);
 
-        iniciarNivell();
     }
 
     public void iniciarNivell(){
