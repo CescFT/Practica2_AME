@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,11 +63,15 @@ public class MainActivity extends AppCompatActivity {
     private int punts = 0;
     private int modeJoc; // Classic -> 0; Madness -> 1
 
+    //SWITCH
+    private Switch dispositiuE;
+
     // BUTTONS
     private Button botoBlau; // Botons de llum
     private Button botoVermell;
     private Button botoVerd;
     private Button botoGroc;
+    private Button botoClassic;
 
     private Button nivell1; // Botons de madness
     private Button nivell2;
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     // LAYOUTS
     private LinearLayout botonera; // Botonera amb els botons d'inici de joc
     private LinearLayout radioGrup; // Botonera nivell madness
+    private LinearLayout labelBluetooth;
 
     // LISTS
     private List<Integer> sequencia = new ArrayList<Integer>();
@@ -91,9 +97,19 @@ public class MainActivity extends AppCompatActivity {
     // INPUT TEXT
     private EditText textNomJugador;
 
+    private Switch jugarPC;
+
     // DATA STREAMS
     private OutputStream outputStream;
     private InputStream inStream;
+
+    //STRINGS
+    private String dadesRebudes="";
+
+    //BOOLEANS
+    private boolean dispositiuExtern=false;
+    private boolean escoltar = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +132,11 @@ public class MainActivity extends AppCompatActivity {
         botoBlau = (Button) findViewById(R.id.botoBlau);
         botoBlau.setEnabled(false);
         botoBlau.setTag(3);
+        botoClassic = (Button) findViewById(R.id.bclassic);
+
+        jugarPC = (Switch) findViewById(R.id.bluetoothSwitch);
+
+        botonera = (LinearLayout) findViewById(R.id.botonera);
 
         // DECLARACIO MADNESS
         madness = (Button) findViewById(R.id.bmadness);
@@ -140,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         textResultat = (TextView) findViewById(R.id.textResultat);
         textFase = (TextView) findViewById(R.id.fase);
         labelFase = (TextView) findViewById(R.id.labelFase);
-
+        labelBluetooth = (LinearLayout) findViewById(R.id.layoutBluetooth);
         sharedPrefs = getPreferences(MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
 
@@ -148,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         String rankJSON = sharedPrefs.getString("ranking", "");
         llistaRanking = rankJSON.equals("") ? new ArrayList<Guanyador>()
                 : (List<Guanyador>) gson.fromJson(rankJSON, new TypeToken<List<Guanyador>>() {
-                }.getType());
+        }.getType());
 
         try {
             init();
@@ -180,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
     // INICIALITZACIONS DELS COMPONENTS
     public void inicialitzacions() {
         amagarComponents();
+        dispositiuExtern = jugarPC.isChecked();
         textResultat.setText("");
         punts = 0;
         textResultat.setText("");
@@ -242,6 +264,10 @@ public class MainActivity extends AppCompatActivity {
             temps += 500;
 
         }
+        try{
+            write("5");
+        }catch(Exception e){}
+        escoltar = true;
         temps = 0;
     }
 
@@ -265,6 +291,10 @@ public class MainActivity extends AppCompatActivity {
         botoGroc.setEnabled(false);
         botoBlau.setEnabled(false);
         mostrarComponents();
+
+        try{
+            write("8");
+        }catch(Exception e) {}
 
         if (modeJoc == 0) {
             Intent intent = new Intent(MainActivity.this, RankingActivity.class);
@@ -305,21 +335,43 @@ public class MainActivity extends AppCompatActivity {
             punts += nivell * 10;
             textResultat.setText(String.valueOf(punts));
             index++;
+            boolean finalNivell = false;
             if (modeJoc == 0 && index == nivell) {
+                finalNivell = true;
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         seguentNivell();
                     }
                 }, 2000);
+                try{
+                    write("7");
+                }catch(Exception e){
+
+                }
             } else if (modeJoc == 1 && ((int) (index / dificultat)) == nivell) {
+                finalNivell = true;
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         seguentNivell();
                     }
                 }, 2000);
+
+                try{
+                    write("7");
+                }catch(Exception e){}
+
             }
+            if(dispositiuExtern && !finalNivell){
+                try{
+                    write("0");
+                }catch(Exception e){
+
+                }
+            }
+
+            escoltar = true;
         }
     }
 
@@ -327,6 +379,7 @@ public class MainActivity extends AppCompatActivity {
     public void seguentNivell() {
         nivell++;
         iniciarNivell();
+
 
     }
 
@@ -341,26 +394,26 @@ public class MainActivity extends AppCompatActivity {
     private void canviColor(int tag, boolean canvi) {
         try {
             switch (tag) {
-            case 0: // vermell
-                botoVermell.setBackgroundColor(
-                        getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
-                write("1");
-                break;
-            case 1: // verd
-                botoVerd.setBackgroundColor(
-                        getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
-                write("2");
-                break;
-            case 2: // groc
-                botoGroc.setBackgroundColor(
-                        getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
-                write("3");
-                break;
-            case 3: // blau
-                botoBlau.setBackgroundColor(
-                        getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
-                write("4");
-                break;
+                case 0: // vermell
+                    botoVermell.setBackgroundColor(
+                            getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
+                    if(dispositiuExtern) write("1");
+                    break;
+                case 1: // verd
+                    botoVerd.setBackgroundColor(
+                            getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
+                    if(dispositiuExtern) write("2");
+                    break;
+                case 2: // groc
+                    botoGroc.setBackgroundColor(
+                            getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
+                    if(dispositiuExtern) write("3");
+                    break;
+                case 3: // blau
+                    botoBlau.setBackgroundColor(
+                            getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
+                    if(dispositiuExtern) write("4");
+                    break;
             }
         } catch (Exception e) {
 
@@ -383,12 +436,14 @@ public class MainActivity extends AppCompatActivity {
         labelFase.setVisibility(View.INVISIBLE);
         radioGrup.setVisibility(View.VISIBLE);
         radioGrup.setVisibility(View.INVISIBLE);
+        labelBluetooth.setVisibility(View.VISIBLE);
     }
 
     public void amagarComponents() {
         botonera.setVisibility(View.GONE);
         radioGrup.setVisibility(View.GONE);
         textNomJugador.setVisibility(View.INVISIBLE);
+        labelBluetooth.setVisibility(View.INVISIBLE);
     }
 
     // BLUETOOTH
@@ -419,4 +474,49 @@ public class MainActivity extends AppCompatActivity {
         outputStream.write(s.getBytes());
     }
 
+    /*
+    public void comunicar() {
+        final int BUFFER_SIZE = 1024;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int bytes = 0;
+        int b = BUFFER_SIZE;
+        while (escoltar) {
+            try {
+                bytes = inStream.read(buffer, bytes, BUFFER_SIZE - bytes);
+                if(bytes > 0){
+                    switch(new String(buffer)){
+                        case "r":
+                            comprovaBoto(0);
+                            escoltar = false;
+                            break;
+                        case "g":
+                            comprovaBoto(1);
+                            escoltar = false;
+                            break;
+                        case "b":
+                            comprovaBoto(3);
+                            escoltar = false;
+                            break;
+                        case "y":
+                            comprovaBoto(2);
+                            escoltar = false;
+                            break;
+                        default:
+                            try{
+                                write("9");
+                            }catch(Exception e){
+
+                            }
+                            escoltar = false;
+                            break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }*/
+
 }
+
