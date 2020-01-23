@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         ok = MediaPlayer.create(this, R.raw.ok);
         canviFase = MediaPlayer.create(this, R.raw.bell);
         entroRanking = MediaPlayer.create(this, R.raw.cheer);
-        canviFase.setVolume(0.50f,0.50f);
+        canviFase.setVolume(0.30f,0.30f);
 
         // DECLARACIO BOTONS
         botoVermell = (Button) findViewById(R.id.botoVermell);
