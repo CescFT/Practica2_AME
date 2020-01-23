@@ -28,7 +28,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,109 +46,217 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Elements que necessitem per a executar el codi
      */
+
+    // TEXT VIEWS
     private TextView textResultat;
     private TextView textFase;
     private TextView labelFase;
 
-    private int indexSeq;
-    private Button botoBlau;
+    // INTS
+    private int index = 0; // Valor de pressió de l'usuari
+    private int valorEscollit = 5; // Boto premut (DEFAULT 5)
+    private int llargadaSequencia; // Llargada de la sequencia
+    private int temps = 0; // Temps d'espera pels handlers
+    private int nivell; // Nivell en el que es troba
+    private int dificultat; // Dificultat de l'usuari
+    private int punts = 0;
+    private int modeJoc; // Classic -> 0; Madness -> 1
+
+    // BUTTONS
+    private Button botoBlau; // Botons de llum
     private Button botoVermell;
     private Button botoVerd;
     private Button botoGroc;
 
-    private LinearLayout botonera;
-
-    private List<Integer> sequencia = new ArrayList<Integer>();
-    private int index = 0;
-    private int valorEscollit = 5;
-    private int sequenceLength;
-    private SharedPreferences sharedPrefs;
-    private SharedPreferences.Editor sharedPrefsEditor;
-    private Handler handler = new Handler();
-    private int temps = 0;
-    private static List<Guanyador> llistaRanking = new ArrayList<Guanyador>();
-    private LinearLayout radioGrup;
-    private Button nivell1;
+    private Button nivell1; // Botons de madness
     private Button nivell2;
     private Button nivell3;
     private Button madness;
 
+    // LAYOUTS
+    private LinearLayout botonera; // Botonera amb els botons d'inici de joc
+    private LinearLayout radioGrup; // Botonera nivell madness
+
+    // LISTS
+    private List<Integer> sequencia = new ArrayList<Integer>();
+    private static List<Guanyador> llistaRanking = new ArrayList<Guanyador>();
+
+    // SHARED PREFERENCES
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor sharedPrefsEditor;
+
+    // HANDLER
+    private Handler handler = new Handler();
+
+    // INPUT TEXT
     private EditText textNomJugador;
 
-    private int nivell;
-    private int dificultat;
-    private int punts = 0;
-    private int modeJoc;
-
+    // DATA STREAMS
     private OutputStream outputStream;
     private InputStream inStream;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        indexSeq = 0;
-        botoBlau = (Button) findViewById(R.id.botoBlau);
+        // DECLARACIO BOTONS
         botoVermell = (Button) findViewById(R.id.botoVermell);
+        botoVermell.setEnabled(false);
+        botoVermell.setTag(0);
+
         botoVerd = (Button) findViewById(R.id.botoVerd);
+        botoVerd.setEnabled(false);
+        botoVerd.setTag(1);
+
         botoGroc = (Button) findViewById(R.id.botoGroc);
+        botoGroc.setEnabled(false);
+        botoGroc.setTag(2);
+
+        botoBlau = (Button) findViewById(R.id.botoBlau);
+        botoBlau.setEnabled(false);
+        botoBlau.setTag(3);
+
+        // DECLARACIO MADNESS
+        madness = (Button) findViewById(R.id.bmadness);
+
+        radioGrup = (LinearLayout) findViewById(R.id.layoutNivell);
+        radioGrup.setVisibility(View.INVISIBLE);
+
+        nivell1 = (Button) findViewById(R.id.madness1);
+        nivell1.setTag(1);
+
+        nivell2 = (Button) findViewById(R.id.madness2);
+        nivell2.setTag(2);
+
+        nivell3 = (Button) findViewById(R.id.madness3);
+        nivell3.setTag(3);
+
+        // DECLARACIO NOM JUGADOR
+        textNomJugador = (EditText) findViewById(R.id.editText);
+        textNomJugador.setVisibility(View.VISIBLE);
+
+        // ALTRES DECLARACIONS
         textResultat = (TextView) findViewById(R.id.textResultat);
         textFase = (TextView) findViewById(R.id.fase);
         labelFase = (TextView) findViewById(R.id.labelFase);
-        botonera = (LinearLayout) findViewById(R.id.botonera);
-
-        radioGrup = (LinearLayout) findViewById(R.id.layoutNivell);
-        nivell1 = (Button) findViewById(R.id.madness1);
-        nivell2 = (Button) findViewById(R.id.madness2);
-        nivell3 = (Button) findViewById(R.id.madness3);
-        madness = (Button) findViewById(R.id.bmadness);
-        textNomJugador = (EditText) findViewById(R.id.editText);
-
-        botoVermell.setEnabled(false);
-        botoVerd.setEnabled(false);
-        botoGroc.setEnabled(false);
-        botoBlau.setEnabled(false);
-        botoVermell.setTag(0);
-        botoVerd.setTag(1);
-        botoGroc.setTag(2);
-        botoBlau.setTag(3);
-
-        nivell1.setTag(1);
-        nivell2.setTag(2);
-        nivell3.setTag(3);
-        radioGrup.setVisibility(View.INVISIBLE);
-        textNomJugador.setVisibility(View.VISIBLE);
 
         sharedPrefs = getPreferences(MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
 
         Gson gson = new Gson();
         String rankJSON = sharedPrefs.getString("ranking", "");
-        llistaRanking = rankJSON.equals("") ? new ArrayList<Guanyador>() : (List<Guanyador>) gson.fromJson(rankJSON, new TypeToken<List<Guanyador>>() {
-        }.getType());
+        llistaRanking = rankJSON.equals("") ? new ArrayList<Guanyador>()
+                : (List<Guanyador>) gson.fromJson(rankJSON, new TypeToken<List<Guanyador>>() {
+                }.getType());
 
-        try{
+        try {
             init();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
 
     }
 
+    // CLASSIC
+    public void onClickJugarClassic(View view) {
+        modeJoc = 0;
+        sequencia = new ArrayList<Integer>();
+        llargadaSequencia = 0;
+        inicialitzacions();
+    }
 
-    public void clicaBoto(final int c) {
-        canviColorClar(c, true);
+    // MADNESS
+    public void onClickJugarMadness(View view) {
+        modeJoc = 1;
+        int seleccionat = view.getId();
+        Button rb = (Button) findViewById(seleccionat);
+        dificultat = (int) rb.getTag();
+        inicialitzacions();
+        madness.setBackgroundDrawable(nivell1.getBackground());
+
+    }
+
+    // INICIALITZACIONS DELS COMPONENTS
+    public void inicialitzacions() {
+        amagarComponents();
+        textResultat.setText("");
+        punts = 0;
+        textResultat.setText("");
+        nivell = 1;
+        textFase.setTextSize(32);
+        textFase.setText("Prepara't!");
+        botoVermell.setEnabled(true);
+        botoVerd.setEnabled(true);
+        botoGroc.setEnabled(true);
+        botoBlau.setEnabled(true);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                canviColorClar(c, false);
+                iniciarNivell();
+            }
+        }, 2000);
+
+    }
+
+    // INICIAR NIVELL
+    public void iniciarNivell() {
+        labelFase.setVisibility(View.VISIBLE);
+        textFase.setTextSize(44);
+        textFase.setText(String.valueOf(nivell));
+
+        Random rand = new Random();
+        if (modeJoc == 1) {
+            sequencia = new ArrayList<Integer>();
+            llargadaSequencia = nivell * dificultat;
+            // inicialització de la seqüència que tindrà el joc.
+            for (int i = 0; i < llargadaSequencia; i++) {
+                sequencia.add(rand.nextInt(4));
+            }
+        } else {
+            sequencia.add(rand.nextInt(4));
+            llargadaSequencia++;
+        }
+        index = 0;
+
+        // BLOQUEJAR PANTALLA
+        bloquejarPantalla(true);
+        for (final Integer c : sequencia) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    canviColor(c, true);
+                }
+            }, temps);
+            temps += 500;
+            final int tempsFinal = temps;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    canviColor(c, false);
+                    if (tempsFinal == (500 * llargadaSequencia * 2) - 500) {
+                        bloquejarPantalla(false);
+                    }
+                }
+            }, temps);
+            temps += 500;
+
+        }
+        temps = 0;
+    }
+
+    // CANVI LLUM BOTO CLICK USUARI
+    public void clicaBoto(final int c) {
+        canviColor(c, true);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                canviColor(c, false);
             }
         }, 250);
     }
 
+    // GAME OVER FINAL JOC
     public void finalJoc() {
         textFase.setText("Cesc Says!");
         textResultat.setText("Game Over");
@@ -184,13 +291,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // DISPLAY DE LA BOTONERA DE MADNESS
     public void onClickSelectLevelMadness(View view) {
         radioGrup.setVisibility(View.VISIBLE);
         madness.setBackgroundColor(getResources().getColor(R.color.colorBotoPitjat));
     }
 
+    // COMPROVA RESULTAT DEL CLICK DE L'USUARI
     public void comprovaBoto(int c) {
-        if (c != sequencia.get(index)) finalJoc();
+        if (c != sequencia.get(index))
+            finalJoc();
         else {
             punts += nivell * 10;
             textResultat.setText(String.valueOf(punts));
@@ -213,53 +323,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // PASSAR DE NIVELL
     public void seguentNivell() {
         nivell++;
         iniciarNivell();
 
     }
 
+    // EXECUCIO RUTINA CLICAR BOTO
     public void onClickBoto(View view) {
         int tag = (int) view.getTag();
         clicaBoto(tag);
         comprovaBoto(tag);
     }
 
-    private void canviColorClar(int tag, boolean canvi) {
-        try{
+    // CANVI A CLAR/FOSC DELS BOTONS
+    private void canviColor(int tag, boolean canvi) {
+        try {
             switch (tag) {
-                case 0: //vermell
-                    botoVermell.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
-                    write("1");
-                    break;
-                case 1: //verd
-                    botoVerd.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
-                    write("2");
-                    break;
-                case 2: //groc
-                    botoGroc.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
-                    write("3");
-                    break;
-                case 3: //blau
-                    botoBlau.setBackgroundColor(getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
-                    write("4");
-                    break;
+            case 0: // vermell
+                botoVermell.setBackgroundColor(
+                        getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
+                write("1");
+                break;
+            case 1: // verd
+                botoVerd.setBackgroundColor(
+                        getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
+                write("2");
+                break;
+            case 2: // groc
+                botoGroc.setBackgroundColor(
+                        getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
+                write("3");
+                break;
+            case 3: // blau
+                botoBlau.setBackgroundColor(
+                        getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
+                write("4");
+                break;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
 
     }
 
-
     public void bloquejarPantalla(boolean b) {
 
-        //activar boto
+        // activar boto
         botoVermell.setEnabled(!b);
         botoBlau.setEnabled(!b);
         botoGroc.setEnabled(!b);
         botoVerd.setEnabled(!b);
-
 
     }
 
@@ -276,97 +391,15 @@ public class MainActivity extends AppCompatActivity {
         textNomJugador.setVisibility(View.INVISIBLE);
     }
 
-    public void onClickJugarClassic(View view) {
-        modeJoc = 0;
-        sequencia = new ArrayList<Integer>();
-        sequenceLength = 0;
-        inicialitzacions();
-    }
-
-    public void onClickJugarMadness(View view) {
-        modeJoc = 1;
-        int seleccionat = view.getId();
-        Button rb = (Button) findViewById(seleccionat);
-        dificultat = (int) rb.getTag();
-        inicialitzacions();
-        madness.setBackgroundDrawable(nivell1.getBackground());
-
-    }
-
-    public void inicialitzacions() {
-        amagarComponents();
-        textResultat.setText("");
-        punts = 0;
-        textResultat.setText("");
-        nivell = 1;
-        textFase.setTextSize(32);
-        textFase.setText("Prepara't!");
-        botoVermell.setEnabled(true);
-        botoVerd.setEnabled(true);
-        botoGroc.setEnabled(true);
-        botoBlau.setEnabled(true);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                iniciarNivell();
-            }
-        }, 2000);
-
-    }
-
-    public void iniciarNivell() {
-        labelFase.setVisibility(View.VISIBLE);
-        textFase.setTextSize(44);
-        textFase.setText(String.valueOf(nivell));
-
-        Random rand = new Random();
-        if (modeJoc == 1) {
-            sequencia = new ArrayList<Integer>();
-            sequenceLength = nivell * dificultat;
-            //inicialització de la seqüència que tindrà el joc.
-            for (int i = 0; i < sequenceLength; i++) {
-                sequencia.add(rand.nextInt(4));
-            }
-        } else {
-            sequencia.add(rand.nextInt(4));
-            sequenceLength++;
-        }
-        index = 0;
-
-
-        bloquejarPantalla(true);
-        for (final Integer c : sequencia) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    canviColorClar(c, true);
-                }
-            }, temps);
-            temps += 500;
-            final int tempsFinal = temps;
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    canviColorClar(c, false);
-                    if (tempsFinal == (500 * sequenceLength * 2) - 500) {
-                        bloquejarPantalla(false);
-                    }
-                }
-            }, temps);
-            temps += 500;
-
-        }
-        temps = 0;
-    }
-
+    // BLUETOOTH
     private void init() throws IOException {
         BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
         if (blueAdapter != null) {
             if (blueAdapter.isEnabled()) {
                 Set<BluetoothDevice> bondedDevices = blueAdapter.getBondedDevices();
 
-                if(bondedDevices.size() > 0) {
-                    Object[] devices = (Object []) bondedDevices.toArray();
+                if (bondedDevices.size() > 0) {
+                    Object[] devices = (Object[]) bondedDevices.toArray();
                     BluetoothDevice device = (BluetoothDevice) devices[0];
                     ParcelUuid[] uuids = device.getUuids();
                     BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
