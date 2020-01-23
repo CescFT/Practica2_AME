@@ -175,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
                         seguentNivell();
                     }
                 }, 2000);
+            }else if(modeJoc==1 && ((int)(index/dificultat))==nivell){
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        seguentNivell();
+                    }
+                }, 2000);
             }
         }
     }
