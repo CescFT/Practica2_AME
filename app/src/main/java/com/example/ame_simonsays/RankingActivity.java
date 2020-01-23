@@ -39,7 +39,6 @@ public class RankingActivity extends AppCompatActivity {
         text3 = (TextView) findViewById(R.id.rankText3);
         text4 = (TextView) findViewById(R.id.rankText4);
         text5 = (TextView) findViewById(R.id.rankText5);
-        btnUpdateRanking = (Button) findViewById(R.id.updateRanking);
 
         updateRanking();
 
