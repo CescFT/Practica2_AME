@@ -18,8 +18,10 @@ import android.widget.TextView;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor sharedPrefsEditor;
     private Handler handler = new Handler();
     private int temps=0;
-
+    private static List<Guanyador> llistaRanking = new ArrayList<Guanyador>();
     private LinearLayout radioGrup;
     private Button nivell1;
     private Button nivell2;
@@ -104,7 +106,10 @@ public class MainActivity extends AppCompatActivity {
         sharedPrefs = getPreferences(MODE_PRIVATE);
         sharedPrefsEditor = sharedPrefs.edit();
 
-
+        Gson gson = new Gson();
+        String rankJSON = sharedPrefs.getString("ranking","");
+        llistaRanking = rankJSON.equals("") ? new ArrayList<Guanyador>() : (List<Guanyador>) gson.fromJson(rankJSON, new TypeToken<List<Guanyador>>() {
+        }.getType());
 
 
     }
@@ -126,12 +131,30 @@ public class MainActivity extends AppCompatActivity {
         botoGroc.setEnabled(false);
         botoBlau.setEnabled(false);
         mostrarComponents();
-        Intent intent = new Intent(MainActivity.this,RankingActivity.class);
-        intent.putExtra("Puntuacio", String.valueOf(punts));
-        intent.putExtra("nomJugador", textNomJugador.getText().toString());
-        sharedPrefsEditor.putString(textNomJugador.getText().toString(), String.valueOf(punts));
-        sharedPrefsEditor.commit();
-        startActivity(intent);
+
+        if(modeJoc==0) {
+            Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+
+            llistaRanking.add(new Guanyador(textNomJugador.getText().toString(), punts));
+            Collections.sort(llistaRanking);
+            Collections.reverse(llistaRanking);
+            List<Guanyador> subRanking = new ArrayList();
+            try {
+                subRanking = llistaRanking.subList(0, 5);
+            } catch (Exception e) {
+                subRanking = llistaRanking;
+            }
+            Gson gson = new Gson();
+            String info = gson.toJson(subRanking);
+            sharedPrefsEditor.putString("ranking", info);
+            sharedPrefsEditor.commit();
+            ArrayList<String> rankingString = new ArrayList<String>();
+            for (Guanyador o : llistaRanking) {
+                rankingString.add(o.toString());
+            }
+            intent.putStringArrayListExtra("RankingActual", rankingString);
+            startActivity(intent);
+        }
     }
 
     public void onClickSelectLevelMadness(View view){
@@ -145,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             punts += nivell*10;
             textResultat.setText(String.valueOf(punts));
             index++;
-            if(index==nivell){
+            if(modeJoc==0 && index==nivell){
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

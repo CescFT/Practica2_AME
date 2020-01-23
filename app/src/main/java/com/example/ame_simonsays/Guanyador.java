@@ -1,6 +1,8 @@
 package com.example.ame_simonsays;
 
-public class Guanyador implements Comparable<Guanyador>{
+import java.io.Serializable;
+
+public class Guanyador implements Comparable<Guanyador>, Serializable {
     private String nomJugador;
     private int puntuacioObtinguda;
 
@@ -27,10 +29,7 @@ public class Guanyador implements Comparable<Guanyador>{
 
     @Override
     public String toString() {
-        return "Guanyador{" +
-                "nomJugador='" + nomJugador + '\'' +
-                ", puntuacioObtinguda=" + puntuacioObtinguda +
-                '}';
+        return nomJugador+","+puntuacioObtinguda;
     }
 
     @Override

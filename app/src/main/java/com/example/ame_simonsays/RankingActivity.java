@@ -13,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,8 +29,6 @@ public class RankingActivity extends AppCompatActivity {
         this.onBackPressed();
     }
 
-    private SharedPreferences mPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,54 +40,56 @@ public class RankingActivity extends AppCompatActivity {
         text4 = (TextView) findViewById(R.id.rankText4);
         text5 = (TextView) findViewById(R.id.rankText5);
         btnUpdateRanking = (Button) findViewById(R.id.updateRanking);
-        mPreferences = getPreferences(MODE_PRIVATE);
+
+        updateRanking();
 
 
 
     }
 
-    public void onClickButtonUpdate(View view){
-        String data = getIntent().getStringExtra("Puntuacio");
-        String nomJugadorActual = getIntent().getStringExtra("nomJugador");
-        int puntuacioActual = Integer.valueOf(data);
+    public void updateRanking(){
+        ArrayList<String> data = getIntent().getStringArrayListExtra("RankingActual");
         List<Guanyador> guanyadors = new ArrayList<Guanyador>();
 
-        for(String jugador : mPreferences.getAll().keySet()){
-            String puntsJugadorEmmagatzemat = String.valueOf(mPreferences.getAll().get(jugador));
-            int integerPuntsJugadorEmmagatzemat = Integer.valueOf(puntsJugadorEmmagatzemat);
-
-            guanyadors.add(new Guanyador(jugador, integerPuntsJugadorEmmagatzemat));
+        for(String s : data)
+        {
+            String [] sTallat = s.split(",");
+            guanyadors.add(new Guanyador(sTallat[0], Integer.parseInt(sTallat[1])));
         }
 
-        guanyadors.add(new Guanyador(nomJugadorActual, puntuacioActual));
-
         Collections.sort(guanyadors);
-
+        Collections.reverse(guanyadors);
         for(int i = 0; i<guanyadors.size(); i++)
         {
             String textToPrint="";
-            switch (i){
-                case 0:
-                    textToPrint = guanyadors.get(0).getNomJugador()+"punts:"+String.valueOf(guanyadors.get(0).getPuntuacioObtinguda());
-                    text1.setText(textToPrint);
-                    break;
-                case 1:
-                    textToPrint = guanyadors.get(1).getNomJugador()+"punts:"+String.valueOf(guanyadors.get(1).getPuntuacioObtinguda());
-                    text2.setText(textToPrint);
-                    break;
-                case 2:
-                    textToPrint = guanyadors.get(2).getNomJugador()+"punts:"+String.valueOf(guanyadors.get(2).getPuntuacioObtinguda());
-                    text3.setText(textToPrint);
-                    break;
-                case 3:
-                    textToPrint = guanyadors.get(3).getNomJugador()+"punts:"+String.valueOf(guanyadors.get(3).getPuntuacioObtinguda());
-                    text4.setText(textToPrint);
-                    break;
-                case 4:
-                    textToPrint = guanyadors.get(4).getNomJugador()+"punts:"+String.valueOf(guanyadors.get(4).getPuntuacioObtinguda());
-                    text5.setText(textToPrint);
-                    break;
+            try{
+                Guanyador winner = guanyadors.get(i);
+                switch (i){
+                    case 0:
+                        textToPrint = guanyadors.get(i).getNomJugador()+"  "+String.valueOf(guanyadors.get(i).getPuntuacioObtinguda());
+                        text1.setText(textToPrint);
+                        break;
+                    case 1:
+                        textToPrint = guanyadors.get(i).getNomJugador()+"  "+String.valueOf(guanyadors.get(i).getPuntuacioObtinguda());
+                        text2.setText(textToPrint);
+                        break;
+                    case 2:
+                        textToPrint = guanyadors.get(i).getNomJugador()+"  "+String.valueOf(guanyadors.get(i).getPuntuacioObtinguda());
+                        text3.setText(textToPrint);
+                        break;
+                    case 3:
+                        textToPrint = guanyadors.get(i).getNomJugador()+"  "+String.valueOf(guanyadors.get(i).getPuntuacioObtinguda());
+                        text4.setText(textToPrint);
+                        break;
+                    case 4:
+                        textToPrint = guanyadors.get(i).getNomJugador()+"  "+String.valueOf(guanyadors.get(i).getPuntuacioObtinguda());
+                        text5.setText(textToPrint);
+                        break;
+                }
+            } catch(Exception e){
+                break;
             }
+
         }
 
     }
