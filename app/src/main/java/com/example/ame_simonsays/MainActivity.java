@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private Button botoVermell;
     private Button botoVerd;
     private Button botoGroc;
-    private Button botoBluetooth;
 
     private LinearLayout botonera;
 
@@ -90,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        botoBluetooth = (Button) findViewById(R.id.bluetoothBtn);
 
 
         indexSeq = 0;
@@ -142,12 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    public void onClickBluetooth(View view)
-    {
-        Intent i = new Intent(MainActivity.this, BluetoothActivity.class);
-        startActivity(i);
-    }
 
     public void clicaBoto(final int c) {
         canviColorClar(c, true);
