@@ -8,12 +8,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -110,11 +113,25 @@ public class MainActivity extends AppCompatActivity {
     private boolean dispositiuExtern=false;
     private boolean escoltar = false;
 
+    private MediaPlayer mi, re, si, sol, ok, canviFase, entroRanking;
+
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        mi = MediaPlayer.create(this, R.raw.mi);
+        re = MediaPlayer.create(this, R.raw.re);
+        si = MediaPlayer.create(this, R.raw.si);
+        sol = MediaPlayer.create(this, R.raw.sol);
+        ok = MediaPlayer.create(this, R.raw.ok);
+        canviFase = MediaPlayer.create(this, R.raw.bell);
+        entroRanking = MediaPlayer.create(this, R.raw.cheer);
+        canviFase.setVolume(0.50f,0.50f);
 
         // DECLARACIO BOTONS
         botoVermell = (Button) findViewById(R.id.botoVermell);
@@ -184,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         modeJoc = 0;
         sequencia = new ArrayList<Integer>();
         llargadaSequencia = 0;
+        ok.start();
         inicialitzacions();
     }
 
@@ -194,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
         Button rb = (Button) findViewById(seleccionat);
         dificultat = (int) rb.getTag();
         inicialitzacions();
+        ok.start();
         madness.setBackgroundDrawable(nivell1.getBackground());
 
     }
@@ -291,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
         botoGroc.setEnabled(false);
         botoBlau.setEnabled(false);
         mostrarComponents();
-
+        vibrator.vibrate(1000);
         try{
             write("8");
         }catch(Exception e) {}
@@ -299,15 +318,17 @@ public class MainActivity extends AppCompatActivity {
         if (modeJoc == 0) {
             Intent intent = new Intent(MainActivity.this, RankingActivity.class);
 
+
             llistaRanking.add(new Guanyador(textNomJugador.getText().toString(), punts));
             Collections.sort(llistaRanking);
             Collections.reverse(llistaRanking);
             List<Guanyador> subRanking = new ArrayList();
             try {
-                subRanking = llistaRanking.subList(0, 5);
+                subRanking = llistaRanking.subList(0, 4);
             } catch (Exception e) {
                 subRanking = llistaRanking;
             }
+
             Gson gson = new Gson();
             String info = gson.toJson(subRanking);
             sharedPrefsEditor.putString("ranking", info);
@@ -324,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
     // DISPLAY DE LA BOTONERA DE MADNESS
     public void onClickSelectLevelMadness(View view) {
         radioGrup.setVisibility(View.VISIBLE);
+        ok.start();
         madness.setBackgroundColor(getResources().getColor(R.color.colorBotoPitjat));
     }
 
@@ -338,6 +360,8 @@ public class MainActivity extends AppCompatActivity {
             boolean finalNivell = false;
             if (modeJoc == 0 && index == nivell) {
                 finalNivell = true;
+
+                canviFase.start();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -351,6 +375,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else if (modeJoc == 1 && ((int) (index / dificultat)) == nivell) {
                 finalNivell = true;
+
+                canviFase.start();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -398,21 +424,25 @@ public class MainActivity extends AppCompatActivity {
                     botoVermell.setBackgroundColor(
                             getResources().getColor((canvi) ? R.color.colorVermellClar : R.color.colorVermellFosc));
                     if(dispositiuExtern) write("1");
+                    mi.start();
                     break;
                 case 1: // verd
                     botoVerd.setBackgroundColor(
                             getResources().getColor((canvi) ? R.color.colorVerdClar : R.color.colorVerdFosc));
                     if(dispositiuExtern) write("2");
+                    re.start();
                     break;
                 case 2: // groc
                     botoGroc.setBackgroundColor(
                             getResources().getColor((canvi) ? R.color.colorGrocClar : R.color.colorGrocFosc));
                     if(dispositiuExtern) write("3");
+                    si.start();
                     break;
                 case 3: // blau
                     botoBlau.setBackgroundColor(
                             getResources().getColor((canvi) ? R.color.colorBlauClar : R.color.colorBlauFosc));
                     if(dispositiuExtern) write("4");
+                    sol.start();
                     break;
             }
         } catch (Exception e) {

@@ -1,7 +1,9 @@
 package com.example.ame_simonsays;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
@@ -25,7 +27,10 @@ public class RankingActivity extends AppCompatActivity {
     private TextView text1, text2, text3, text4, text5;
     private Button btnUpdateRanking;
 
+    private MediaPlayer ok, cheers;
+
     public void onClickBotoBack(View view){
+        ok.start();
         this.onBackPressed();
     }
 
@@ -39,6 +44,12 @@ public class RankingActivity extends AppCompatActivity {
         text3 = (TextView) findViewById(R.id.rankText3);
         text4 = (TextView) findViewById(R.id.rankText4);
         text5 = (TextView) findViewById(R.id.rankText5);
+        ok = MediaPlayer.create(this, R.raw.ok);
+        cheers = MediaPlayer.create(this,R.raw.cheer);
+
+
+
+
 
         updateRanking();
 
@@ -58,6 +69,10 @@ public class RankingActivity extends AppCompatActivity {
 
         Collections.sort(guanyadors);
         Collections.reverse(guanyadors);
+
+
+
+
         for(int i = 0; i<guanyadors.size(); i++)
         {
             String textToPrint="";
