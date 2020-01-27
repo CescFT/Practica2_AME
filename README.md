@@ -6,7 +6,7 @@ A Universitat Rovira i Virgili's fourth year project involving knowledge about A
 For further implementation with an embedded system, please check this [link](https://github.com/CescFT/Practica3AME).
 
 For more information please, feel free to check the following files, containing the instructions for running this project:
-* [Manual - Catalan (Including the embedded system)](ame_0203_cat.pdf)
+* [Manual - Catalan (Including the embedded system)](AME0203_CAT.pdf)
 
 ## Software Used
 
