@@ -7,6 +7,7 @@ For further implementation with an embedded system, please check this [link](htt
 
 For more information please, feel free to check the following files, containing the instructions for running this project:
 * [Manual - Catalan (Including the embedded system)](AME0203_CAT.pdf)
+* [Maunual - English (Including the embedded system)](ANE0203_ENG.pdf)
 
 ## Software Used
 
